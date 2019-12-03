@@ -111,13 +111,10 @@ public class FXMLTrafficLightController {
 
     @FXML
     void start(ActionEvent event) {
-        /*time = new Timeline();
-        time.setCycleCount(Timeline.INDEFINITE);
-        time.getKeyFrames().add(new KeyFrame(Duration.seconds(1), (ActionEvent event1) -> {
-            turnOnRedLight();
-        }));
-        System.out.println("Playing Animation");
-        time.play();*/
+        redTimer = redSlider.getValue();
+        greenTimer = greenSlider.getValue();
+        yellowTimer = yellowSlider.getValue();
+        System.out.println(redTimer + " " + greenTimer + " " + yellowTimer);
         System.out.println("Playing Animation");
         turnOnRedLight();
         startButton.setDisable(true);
@@ -128,6 +125,9 @@ public class FXMLTrafficLightController {
     void stop(ActionEvent event) {
         time.stop();
         startButton.setDisable(false);
+        redLightOff.setVisible(true);
+        greenLightOff.setVisible(true);
+        yellowLightOff.setVisible(true);
     }
     
     @FXML
@@ -137,6 +137,9 @@ public class FXMLTrafficLightController {
             time.stop();
         }
         startButton.setDisable(false);
+        redLightOff.setVisible(true);
+        greenLightOff.setVisible(true);
+        yellowLightOff.setVisible(true);
     }
     
     @FXML
@@ -160,13 +163,6 @@ public class FXMLTrafficLightController {
             }
         }));
         time.play();
-        /*redLightOff.setVisible(false);
-        if(seconds > redTimer)
-        {
-            seconds = 0;
-            redLightOff.setVisible(true);
-            turnOnGreenLight();
-        }*/
     }
     
     @FXML
@@ -190,13 +186,6 @@ public class FXMLTrafficLightController {
             }
         }));
         time.play();
-        /*greenLightOff.setVisible(false);
-        if(seconds > greenTimer)
-        {
-            seconds = 0;
-            greenLightOff.setVisible(true);
-            turnOnYellowLight();
-        }*/
     }
     
     @FXML
@@ -220,12 +209,5 @@ public class FXMLTrafficLightController {
             }
         }));
         time.play();
-        /*yellowLightOff.setVisible(false);
-        if(seconds > yellowTimer)
-        {
-            seconds = 0;
-            yellowLightOff.setVisible(true);
-            turnOnRedLight();
-        }*/
     }
 }
