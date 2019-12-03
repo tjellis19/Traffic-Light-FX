@@ -5,7 +5,10 @@
  */
 package traffic.light.fxml;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 //import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,6 +18,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 /**
  *
@@ -42,7 +46,7 @@ public class FXMLTrafficLightController {
     private Circle greenLight;
 
     @FXML
-    private Circle greenLightoff;
+    private Circle greenLightOff;
 
     @FXML
     private Button startButton;
@@ -81,38 +85,147 @@ public class FXMLTrafficLightController {
     private double greenTimer;
     
     @FXML
+    private int seconds;
+    
+    @FXML
+    private Timeline time;
+    
+    @FXML
     void changeGreenDelay(DragEvent event) {
         
         greenTimer = greenSlider.getValue();
+        System.out.println(greenSlider.getValue());
     }
 
     @FXML
     void changeRedDelay(DragEvent event) {
-        
+        redTimer = redSlider.getValue();
+        System.out.println(redTimer);
     }
 
     @FXML
     void changeYellowDelay(DragEvent event) {
-        
+        yellowTimer = yellowSlider.getValue();
+        System.out.println(yellowTimer);
     }
 
     @FXML
     void start(ActionEvent event) {
-        
+        /*time = new Timeline();
+        time.setCycleCount(Timeline.INDEFINITE);
+        time.getKeyFrames().add(new KeyFrame(Duration.seconds(1), (ActionEvent event1) -> {
+            turnOnRedLight();
+        }));
+        System.out.println("Playing Animation");
+        time.play();*/
+        System.out.println("Playing Animation");
+        turnOnRedLight();
         startButton.setDisable(true);
         stopButton.disableProperty().bind(startButton.disableProperty().not());
     }
 
     @FXML
     void stop(ActionEvent event) {
-        
+        time.stop();
         startButton.setDisable(false);
     }
     
     @FXML
     void editTime(MouseEvent event) {
-        
+        if(time != null)
+        {
+            time.stop();
+        }
         startButton.setDisable(false);
     }
-
+    
+    @FXML
+    private void turnOnRedLight()
+    {
+        System.out.println("Red Light On");
+        redLightOff.setVisible(false);
+        time = new Timeline();
+        time.setCycleCount(Timeline.INDEFINITE);
+        time.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                seconds++;
+                if(seconds > redTimer)
+                {
+                    seconds = 0;
+                    redLightOff.setVisible(true);
+                    time.stop();
+                    turnOnGreenLight();
+                }
+            }
+        }));
+        time.play();
+        /*redLightOff.setVisible(false);
+        if(seconds > redTimer)
+        {
+            seconds = 0;
+            redLightOff.setVisible(true);
+            turnOnGreenLight();
+        }*/
+    }
+    
+    @FXML
+    private void turnOnGreenLight()
+    {
+        System.out.println("Green Light On");
+        greenLightOff.setVisible(false);
+        time = new Timeline();
+        time.setCycleCount(Timeline.INDEFINITE);
+        time.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                seconds++;
+                if(seconds > greenTimer)
+                {
+                    seconds = 0;
+                    greenLightOff.setVisible(true);
+                    time.stop();
+                    turnOnYellowLight();
+                }
+            }
+        }));
+        time.play();
+        /*greenLightOff.setVisible(false);
+        if(seconds > greenTimer)
+        {
+            seconds = 0;
+            greenLightOff.setVisible(true);
+            turnOnYellowLight();
+        }*/
+    }
+    
+    @FXML
+    private void turnOnYellowLight()
+    {
+        System.out.println("Yellow Light On");
+        yellowLightOff.setVisible(false);
+        time = new Timeline();
+        time.setCycleCount(Timeline.INDEFINITE);
+        time.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                seconds++;
+                if(seconds > yellowTimer)
+                {
+                    seconds = 0;
+                    yellowLightOff.setVisible(true);
+                    time.stop();
+                    turnOnRedLight();
+                }
+            }
+        }));
+        time.play();
+        /*yellowLightOff.setVisible(false);
+        if(seconds > yellowTimer)
+        {
+            seconds = 0;
+            yellowLightOff.setVisible(true);
+            turnOnRedLight();
+        }*/
+    }
 }
